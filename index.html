@@ -22,14 +22,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..900&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#14161A;
-  --ink2:#454B53;
-  --muted:#6E757E;
+  --ink:#111418;
+  --ink2:#333A42;
+  --muted:#434A54;
   --hair:rgba(20,22,26,.13);
   --hair2:rgba(20,22,26,.08);
   --edge:rgba(255,255,255,.55);
-  --pane:rgba(224,228,232,.34);
-  --pane-hi:rgba(228,232,236,.46);
+  --pane:rgba(226,230,234,.54);
+  --pane-hi:rgba(230,234,238,.62);
   --rosso:#C8102E;
   --steel:#4E5A6B;
   --pad:34px;
@@ -39,7 +39,7 @@
   --disp:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
   --sans:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --blur:blur(34px) saturate(1.8);
+  --blur:blur(34px) saturate(1.6) brightness(1.35);
   --lift:0 1px 1px rgba(20,22,26,.04), 0 18px 44px -28px rgba(20,22,26,.55);
 }
 *{box-sizing:border-box}
@@ -65,8 +65,8 @@ body::after{
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
 
 /* ---- la lastra: unica superficie di lettura di tutta la pagina ---- */
-.hd,.steps,fieldset,.readout,.scale,details.meth,.block,footer>.wrap{
-  background:var(--pane);
+.hd,.steps,.part-intro,fieldset,.readout,.scale,details.meth,.block,footer>.wrap{
+  background:linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,.08)),var(--pane);
   -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
   border:1px solid var(--edge);border-radius:var(--r);box-shadow:var(--lift);
 }
@@ -99,14 +99,14 @@ header{border:0}
 /* ---------- questionario ---------- */
 main{padding:0 0 30px}
 .part{padding:66px 0 4px}
-/* i titoli di sezione galleggiano sulla foto: corpo grande e pieno, non serve la lastra */
-.part-hd{display:flex;align-items:baseline;gap:18px;padding:0 var(--pad) 14px;border-bottom:1px solid var(--hair)}
+.part-intro{padding:30px var(--pad) 28px;margin-bottom:12px}
+.part-hd{display:flex;align-items:baseline;gap:18px;padding:0 0 15px;border-bottom:1px solid var(--hair)}
 .part-hd .idx{font-family:var(--mono);font-size:10.5px;color:var(--rosso);letter-spacing:.22em;flex:none}
 .part-hd h2{font-size:clamp(26px,4.6vw,40px);font-weight:800;font-variation-settings:"wdth" 108;letter-spacing:-.037em}
-.part-sub{font-size:15px;color:var(--ink2);margin:16px 0 26px;padding:0 var(--pad);max-width:calc(66ch + var(--pad));line-height:1.6}
+.part-sub{font-size:15px;color:var(--ink2);margin:18px 0 0;padding:0;max-width:66ch;line-height:1.62}
 
 fieldset{margin:0 0 12px;padding:0;transition:border-color .22s,box-shadow .22s,background .22s}
-fieldset:hover{background:var(--pane-hi)}
+fieldset:hover{background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.10)),var(--pane-hi)}
 fieldset:focus-within{border-color:rgba(200,16,46,.42);box-shadow:0 20px 46px -26px rgba(20,22,26,.6)}
 fieldset .q{padding:22px var(--pad) 4px}
 legend{padding:0;display:block;float:left;width:100%}
@@ -138,7 +138,7 @@ select:focus-visible{outline:2px solid var(--rosso);outline-offset:1px}
 .bar-in{
   max-width:calc(var(--maxw) - 52px);margin:0 auto;padding:13px 13px 13px 26px;
   display:flex;align-items:center;gap:20px;flex-wrap:wrap;border-radius:999px;
-  background:rgba(226,230,234,.7);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.08)),rgba(226,230,234,.62);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
   border:1px solid var(--edge);box-shadow:0 16px 42px -20px rgba(20,22,26,.65);
 }
 .prog{flex:1;min-width:160px;padding-left:2px}
@@ -176,7 +176,7 @@ button.go:focus-visible{outline:2px solid var(--rosso);outline-offset:3px}
 
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(20,22,26,.09);
          border:1px solid var(--edge);margin:12px 0 0;border-radius:var(--r);overflow:hidden;box-shadow:var(--lift)}
-.m{background:var(--pane-hi);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);padding:24px}
+.m{background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.06)),var(--pane-hi);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);padding:24px}
 @media (max-width:560px){.metrics{grid-template-columns:repeat(2,1fr)}}
 .m .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .m .v{font-family:var(--disp);font-weight:800;font-size:30px;margin-top:11px;letter-spacing:-.035em;color:var(--ink);font-variant-numeric:tabular-nums}
@@ -262,20 +262,26 @@ footer a:hover{color:var(--rosso);border-bottom-color:var(--rosso)}
   <div class="wrap">
     <form id="form" novalidate>
       <section class="part" id="p1">
-        <div class="part-hd"><span class="idx">PARTE 1</span><h2>Il peso del ruolo</h2></div>
+        <div class="part-intro">
+          <div class="part-hd"><span class="idx">PARTE 1</span><h2>Il peso del ruolo</h2></div>
         <p class="part-sub">Rispondi pensando alla <strong>posizione</strong>, non a te. Se il ruolo fosse ricoperto da qualcun altro, le risposte dovrebbero restare le stesse.</p>
+        </div>
         <div id="q1"></div>
       </section>
 
       <section class="part" id="p2">
-        <div class="part-hd"><span class="idx">PARTE 2</span><h2>Il contesto</h2></div>
+        <div class="part-intro">
+          <div class="part-hd"><span class="idx">PARTE 2</span><h2>Il contesto</h2></div>
         <p class="part-sub">Lo stesso ruolo è pagato diversamente a seconda di dove si trova. Non è rumore: è la componente più documentata della varianza retributiva dopo le caratteristiche individuali.</p>
+        </div>
         <div id="q2"></div>
       </section>
 
       <section class="part" id="p3">
-        <div class="part-hd"><span class="idx">PARTE 3</span><h2>La persona</h2></div>
+        <div class="part-intro">
+          <div class="part-hd"><span class="idx">PARTE 3</span><h2>La persona</h2></div>
         <p class="part-sub">Qui si decide solo <em>dove</em>, dentro la banda, ti collochi. Nessuna di queste risposte può spostarti in una fascia diversa: per farlo serve cambiare ruolo.</p>
+        </div>
         <div id="q3"></div>
       </section>
     </form>
