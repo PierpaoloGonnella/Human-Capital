@@ -2,7 +2,7 @@
 
 Stima la banda di RAL attesa per un ruolo e per la persona che lo ricopre nel mercato del lavoro italiano.
 
-[Apri lo strumento](https://pierpaologonnella.github.io/stima-banda-ral/)
+[Apri lo strumento](https://pierpaologonnella.github.io/Human-Capital/)
 
 ## A cosa serve
 

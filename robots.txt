@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pierpaologonnella.github.io/stima-banda-ral/sitemap.xml
+Sitemap: https://pierpaologonnella.github.io/Human-Capital/sitemap.xml
