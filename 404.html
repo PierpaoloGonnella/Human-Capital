@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#DFE2E5">
+  <title>Pagina non trovata — Human Capital Estimator</title>
+  <style>
+    :root {
+      --ink: #14161A;
+      --ink2: #454B53;
+      --edge: rgba(255,255,255,.55);
+      --pane: rgba(224,228,232,.34);
+      --rosso: #C8102E;
+      --r: 20px;
+      --blur: blur(34px) saturate(1.8);
+      --lift: 0 1px 1px rgba(20,22,26,.04), 0 18px 44px -28px rgba(20,22,26,.55);
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 26px;
+      background: #DFE2E5;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -3%;
+      z-index: -2;
+      background: url("https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2400&auto=format&fit=crop") center/cover no-repeat;
+      filter: saturate(.34) contrast(1.03) blur(2px);
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(180deg, rgba(214,218,222,.16), rgba(212,216,221,.36));
+    }
+    main {
+      width: min(680px, 100%);
+      padding: 54px 44px;
+      background: var(--pane);
+      border: 1px solid var(--edge);
+      border-radius: var(--r);
+      box-shadow: var(--lift);
+      -webkit-backdrop-filter: var(--blur);
+      backdrop-filter: var(--blur);
+    }
+    .code { color: var(--rosso); font-size: .78rem; font-weight: 700; letter-spacing: .2em; }
+    h1 { margin: 12px 0; font-size: clamp(2.4rem, 8vw, 4.5rem); line-height: 1; }
+    p { max-width: 42ch; color: var(--ink2); font-size: 1.08rem; }
+    a { color: var(--ink); text-decoration-color: var(--rosso); text-underline-offset: .25em; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="code">ERRORE 404</div>
+    <h1>Pagina non trovata</h1>
+    <p>La pagina che cerchi non è disponibile. Torna allo strumento per stimare la banda retributiva.</p>
+    <a href="/stima-banda-ral/">Torna alla home</a>
+  </main>
+</body>
+</html>

@@ -1,27 +1,53 @@
 # Human Capital Estimator
 
-Strumento statico per stimare una banda di RAL attesa per un ruolo e per la persona che lo ricopre nel mercato del lavoro italiano.
+Stima la banda di RAL attesa per un ruolo e per la persona che lo ricopre nel mercato del lavoro italiano.
 
-## Aprirlo in locale
+[Apri lo strumento](https://pierpaologonnella.github.io/stima-banda-ral/)
 
-Non richiede installazione né build: apri semplicemente `index.html` nel browser. Per usare il questionario serve JavaScript.
+## A cosa serve
+
+Il questionario restituisce una banda retributiva, un midpoint del ruolo e un punto centrale stimato per la persona. Considera la RAL fissa lorda annua; l’eventuale componente variabile viene indicata separatamente. È pensato per ragionare in modo strutturato sul valore di mercato di una posizione, non per produrre un importo certo.
 
 ## Come funziona
 
 La stima segue tre passaggi:
 
 1. **Peso del ruolo** — sette fattori, fra cui competenze, problem solving, autonomia, responsabilità sulle persone e impatto economico, collocano la posizione in una fascia.
-2. **Contesto** — settore, area geografica, dimensione aziendale e orario ricalibrano la fascia rispetto al mercato.
-3. **Persona** — esperienza, anzianità nel ruolo e nell’azienda, performance, scarsità delle competenze e altri fattori determinano il posizionamento nella banda, senza cambiare il peso del ruolo.
+2. **Contesto** — settore, area geografica, dimensione aziendale e orario ricalibrano il midpoint rispetto al mercato.
+3. **Posizionamento della persona** — esperienza, anzianità, performance, scarsità delle competenze e altri fattori determinano la posizione dentro la banda, senza modificare il peso del ruolo.
 
-Il risultato comprende la banda di mercato, il punto centrale stimato e alcuni elementi di interpretazione. La RAL è lorda annua e si riferisce alla componente fissa; quando rilevante, il variabile è indicato separatamente.
+## Esecuzione in locale
+
+Non servono dipendenze né un processo di build. Puoi aprire direttamente `index.html` nel browser oppure avviare un server locale dalla cartella del progetto:
+
+```sh
+python3 -m http.server
+```
+
+Poi visita `http://localhost:8000`.
+
+## Fonti di calibrazione
+
+La calibrazione dichiarata nella pagina si basa su:
+
+- Osservatorio JobPricing, *JP Salary Outlook 2026* (dati 2025);
+- decomposizioni AKM della varianza salariale, a partire da Card–Heining–Kline e dalla letteratura successiva, incluso il manifatturiero italiano;
+- Sackett et al. (2022) sulla validità dei predittori di performance;
+- metodologie di job evaluation Hay/Korn Ferry, Mercer IPE e WTW GGS;
+- direttiva (UE) 2023/970 e D.Lgs. 96/2026.
+
+## Privacy
+
+Il questionario e il calcolo vengono eseguiti interamente nel browser: le risposte non vengono inviate né salvate. Le sole richieste esterne caricano i font da Google Fonts e la fotografia di sfondo da Unsplash.
 
 ## Limiti
 
-Questa è una stima statistica a scopo informativo: non costituisce consulenza retributiva, legale o contrattuale e non tiene conto di tutte le circostanze individuali o aziendali. La retribuzione effettiva può dipendere anche da CCNL, azienda, negoziazione, momento dell’assunzione e altre variabili non osservate.
+È una stima statistica a scopo informativo, non una consulenza retributiva, legale o contrattuale. Non sostituisce una salary survey e non considera tutte le circostanze individuali, aziendali o i minimi tabellari del CCNL applicato.
 
-Nessun dato lascia il browser: il calcolo avviene interamente in locale e nulla viene salvato.
+## Fotografia
+
+Fotografia di sfondo pubblicata su [Unsplash](https://unsplash.com/photos/0648a3ef77b2).
 
 ## Licenza
 
-[MIT](LICENSE)
+Distribuito con licenza [MIT](LICENSE).
