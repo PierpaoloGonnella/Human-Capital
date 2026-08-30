@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banda retributiva attesa — strumento di stima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F5F2;
+  --card:#FFFFFF;
+  --ink:#14171C;
+  --ink2:#3B424B;
+  --muted:#6E747B;
+  --rule:#D6D9D3;
+  --rule2:#E9EBE6;
+  --cobalt:#1F4FD8;
+  --cobalt-soft:#E5EAFC;
+  --cobalt-mid:#B9C6F4;
+  --plum:#8A2846;
+  --plum-soft:#F5E4EA;
+  --amber:#8A5A16;
+  --r:3px;
+  --maxw:900px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;margin:0;letter-spacing:-0.02em}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* ---------- header ---------- */
+header{border-bottom:1px solid var(--rule);background:var(--card)}
+.hd{padding:44px 0 34px}
+.hd h1{
+  font-size:clamp(30px,6.2vw,52px);line-height:1.02;font-weight:800;
+  font-stretch:112%;margin:14px 0 0;max-width:16ch;
+}
+.hd h1 em{font-style:normal;color:var(--cobalt)}
+.standfirst{margin:18px 0 0;max-width:56ch;color:var(--ink2);font-size:17px}
+.hd .note{margin-top:20px;font-size:13.5px;color:var(--muted);max-width:62ch}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--rule)}
+.step{padding:18px 20px 20px;border-right:1px solid var(--rule)}
+.step:last-child{border-right:0}
+.step .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--cobalt);letter-spacing:.12em}
+.step h3{font-size:14.5px;font-weight:700;margin:6px 0 4px;font-stretch:105%}
+.step p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}
+
+/* ---------- form ---------- */
+main{padding:0 0 40px}
+.part{padding:46px 0 6px}
+.part-hd{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:6px}
+.part-hd .idx{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--cobalt);letter-spacing:.1em;flex:none}
+.part-hd h2{font-size:clamp(20px,3.4vw,27px);font-weight:800;font-stretch:108%}
+.part-sub{font-size:14px;color:var(--muted);margin:12px 0 26px;max-width:66ch}
+
+fieldset{border:0;margin:0 0 14px;padding:0;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r)}
+fieldset>.q{padding:16px 18px 4px}
+legend{padding:0;display:block;float:left;width:100%}
+.qlabel{display:block;font-weight:600;font-size:15.5px;letter-spacing:-0.01em}
+.qhint{display:block;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.45}
+.qnum{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--cobalt);margin-right:8px}
+.opts{clear:both;padding:12px 18px 18px;display:flex;flex-direction:column;gap:0}
+.opt{position:relative;display:flex;align-items:flex-start;gap:11px;padding:9px 10px;border-radius:var(--r);cursor:pointer;border:1px solid transparent}
+.opt+.opt{margin-top:2px}
+.opt:hover{background:var(--paper)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.dot{flex:none;width:15px;height:15px;margin-top:3px;border:1.5px solid var(--rule);border-radius:50%;background:#fff;transition:border-color .12s,box-shadow .12s}
+.opt input:checked~.dot{border-color:var(--cobalt);box-shadow:inset 0 0 0 3.5px var(--cobalt)}
+.opt input:focus-visible~.dot{outline:2px solid var(--cobalt);outline-offset:3px}
+.opt span.txt{font-size:14.5px;line-height:1.42;color:var(--ink2)}
+.opt input:checked~span.txt{color:var(--ink);font-weight:500}
+select{
+  font-family:"Inter Tight",sans-serif;font-size:15px;color:var(--ink);
+  width:100%;padding:11px 12px;border:1px solid var(--rule);border-radius:var(--r);
+  background:#fff;margin:2px 0 18px;
+}
+select:focus-visible{outline:2px solid var(--cobalt);outline-offset:1px}
+.selwrap{padding:0 18px}
+
+/* ---------- action bar ---------- */
+.bar{position:sticky;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--rule);
+     box-shadow:0 -6px 22px rgba(20,23,28,.06)}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:13px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.prog{flex:1;min-width:170px}
+.prog .lbl{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.track{height:3px;background:var(--rule2);margin-top:7px;border-radius:2px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--cobalt);transition:width .25s ease}
+button.go{
+  font-family:"Archivo",sans-serif;font-weight:700;font-size:15px;font-stretch:105%;
+  padding:13px 26px;border:0;border-radius:var(--r);background:var(--ink);color:#fff;cursor:pointer;
+  letter-spacing:-0.01em;transition:background .15s;
+}
+button.go:hover:not(:disabled){background:var(--cobalt)}
+button.go:disabled{background:var(--rule);color:#8B9098;cursor:not-allowed}
+button.go:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+
+/* ---------- results ---------- */
+#out{display:none;border-top:1px solid var(--rule);background:var(--card);padding:0 0 60px;margin-top:34px}
+#out.on{display:block}
+.readout{padding:44px 0 8px}
+.readout .eyebrow{margin-bottom:14px;display:block}
+.big{font-family:"Archivo",sans-serif;font-weight:800;font-stretch:118%;
+     font-size:clamp(34px,8vw,68px);line-height:1;letter-spacing:-0.035em;color:var(--plum);
+     font-variant-numeric:tabular-nums}
+.big .sep{color:var(--rule);font-weight:400;padding:0 .12em}
+.big .cur{font-size:.44em;font-weight:600;vertical-align:.28em;letter-spacing:0;color:var(--ink2)}
+.readout .sub{margin-top:12px;font-size:15px;color:var(--ink2);max-width:60ch}
+
+/* scale */
+.scale{margin:38px 0 6px}
+.scale svg{width:100%;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
+.lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.sw{width:16px;height:9px;flex:none;border-radius:1px}
+
+/* metrics */
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule2);
+         border:1px solid var(--rule2);margin:36px 0 0;border-radius:var(--r);overflow:hidden}
+.m{background:var(--card);padding:16px 16px 15px}
+@media (max-width:560px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.m .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.m .v{font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:600;margin-top:7px;letter-spacing:-0.02em}
+.m .d{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
+
+/* prose blocks */
+.block{margin-top:40px}
+.block h3{font-size:17px;font-weight:700;font-stretch:105%;margin-bottom:10px}
+.block p{margin:0 0 11px;font-size:14.5px;color:var(--ink2);max-width:68ch;line-height:1.6}
+.block ul{margin:0;padding-left:18px;max-width:68ch}
+.block li{font-size:14.5px;color:var(--ink2);margin-bottom:7px;line-height:1.55}
+.callout{border-left:3px solid var(--cobalt);background:var(--cobalt-soft);padding:16px 18px;border-radius:0 var(--r) var(--r) 0}
+.callout.warn{border-left-color:var(--amber);background:#FBF3E4}
+.callout p{margin:0 0 9px;color:var(--ink2)}
+.callout p:last-child{margin:0}
+.callout strong{color:var(--ink)}
+
+details.meth{border-top:1px solid var(--rule);margin-top:44px;padding-top:0}
+details.meth summary{
+  cursor:pointer;padding:20px 0;font-family:"Archivo",sans-serif;font-weight:700;font-size:16px;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+}
+details.meth summary::-webkit-details-marker{display:none}
+details.meth summary::after{content:"+";font-family:"IBM Plex Mono",monospace;color:var(--cobalt);font-size:20px}
+details.meth[open] summary::after{content:"–"}
+details.meth summary:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+.meth-body{padding-bottom:26px}
+table.tbl{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:13.5px}
+table.tbl th,table.tbl td{text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--rule2);vertical-align:top}
+table.tbl th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500}
+table.tbl td.n{font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+
+footer{border-top:1px solid var(--rule);padding:30px 0 60px;font-size:12.5px;color:var(--muted)}
+footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
+
+@media (max-width:640px){
+  .steps{grid-template-columns:1fr}
+  .step{border-right:0;border-bottom:1px solid var(--rule)}
+  .step:last-child{border-bottom:0}
+  .bar-in{padding:11px 18px}
+  button.go{width:100%;order:2}
+  .prog{order:1;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hd">
+    <span class="eyebrow">Strumento di stima · mercato del lavoro italiano · dati 2025</span>
+    <h1>Quanto vale <em>questo ruolo</em>, e dove ci stai dentro tu</h1>
+    <p class="standfirst">Un questionario in tre parti che pesa prima la posizione, poi il contesto, poi la persona — la stessa sequenza usata dai sistemi di job evaluation e dalle strutture retributive aziendali.</p>
+    <p class="note">Il risultato è una banda, non un numero. Istruzione ed esperienza spiegano circa un terzo della variazione retributiva, e l'azienda in cui lavori ne spiega da sola un altro 15–25%. Uno strumento onesto restituisce l'ampiezza reale dell'incertezza.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><span class="n">PARTE 1</span><h3>Il peso del ruolo</h3><p>Sette fattori — competenze, problem solving, autonomia, persone, impatto economico, influenza, condizioni — danno un punteggio che colloca la posizione in una fascia.</p></div>
+    <div class="step"><span class="n">PARTE 2</span><h3>Il contesto</h3><p>Settore, area geografica e dimensione aziendale spostano la fascia verso l'alto o verso il basso, a parità di ruolo.</p></div>
+    <div class="step"><span class="n">PARTE 3</span><h3>La persona</h3><p>Esperienza, anzianità, performance e scarsità della competenza determinano il posizionamento all'interno della banda.</p></div>
+  </div>
+</header>
+
+<noscript><div class="wrap" style="padding:40px 22px"><p><strong>Serve JavaScript.</strong> Il questionario e il calcolo girano interamente nel browser: attiva JavaScript e ricarica la pagina.</p></div></noscript>
+
+<main>
+  <div class="wrap">
+    <form id="form" novalidate>
+      <section class="part" id="p1">
+        <div class="part-hd"><span class="idx">PARTE 1</span><h2>Il peso del ruolo</h2></div>
+        <p class="part-sub">Rispondi pensando alla <strong>posizione</strong>, non a te. Se il ruolo fosse ricoperto da qualcun altro, le risposte dovrebbero restare le stesse.</p>
+        <div id="q1"></div>
+      </section>
+
+      <section class="part" id="p2">
+        <div class="part-hd"><span class="idx">PARTE 2</span><h2>Il contesto</h2></div>
+        <p class="part-sub">Lo stesso ruolo è pagato diversamente a seconda di dove si trova. Non è rumore: è la componente più documentata della varianza retributiva dopo le caratteristiche individuali.</p>
+        <div id="q2"></div>
+      </section>
+
+      <section class="part" id="p3">
+        <div class="part-hd"><span class="idx">PARTE 3</span><h2>La persona</h2></div>
+        <p class="part-sub">Qui si decide solo <em>dove</em>, dentro la banda, ti collochi. Nessuna di queste risposte può spostarti in una fascia diversa: per farlo serve cambiare ruolo.</p>
+        <div id="q3"></div>
+      </section>
+    </form>
+  </div>
+
+  <div class="bar">
+    <div class="bar-in">
+      <div class="prog">
+        <span class="lbl" id="proglbl">0 di 19 risposte</span>
+        <div class="track"><div class="fill" id="fill"></div></div>
+      </div>
+      <button type="button" class="go" id="calc" disabled>Calcola la banda</button>
+    </div>
+  </div>
+
+  <section id="out" aria-live="polite">
+    <div class="wrap">
+      <div class="readout">
+        <span class="eyebrow">Banda di RAL attesa per questo profilo</span>
+        <div class="big"><span class="cur">€</span><span id="lo">—</span><span class="sep">→</span><span id="hi">—</span></div>
+        <p class="sub" id="subline"></p>
+      </div>
+
+      <div class="scale">
+        <svg id="viz" viewBox="0 0 900 210" role="img" aria-labelledby="viztitle">
+          <title id="viztitle">Scala retributiva con distribuzione nazionale, banda di mercato del ruolo e posizione stimata</title>
+        </svg>
+        <div class="legend">
+          <div class="lg"><span class="sw" style="background:#E9EBE6"></span>Distribuzione nazionale (10°–90° percentile)</div>
+          <div class="lg"><span class="sw" style="background:var(--cobalt-mid)"></span>Banda di mercato del ruolo</div>
+          <div class="lg"><span class="sw" style="background:var(--plum)"></span>Stima per la persona</div>
+        </div>
+      </div>
+
+      <div class="metrics" id="metrics"></div>
+
+      <div class="block">
+        <h3>Come leggere il risultato</h3>
+        <div id="read"></div>
+      </div>
+
+      <div class="block" id="flags"></div>
+
+      <div class="block">
+        <h3>Cosa questo numero non sa</h3>
+        <div class="callout">
+          <p><strong>Non sa dove lavori.</strong> Le decomposizioni su dati amministrativi attribuiscono agli effetti fissi d'impresa il 15–25% della varianza retributiva: circa il 15% nel manifatturiero italiano. La stessa persona, con le stesse competenze, viene pagata sistematicamente di più o di meno a seconda dell'azienda. Il questionario cattura questo solo in modo grossolano, tramite settore e dimensione.</p>
+          <p><strong>Non sa quanto rendi.</strong> Anche i migliori strumenti di selezione predicono la performance in modo moderato: i colloqui strutturati si fermano a una validità operativa di circa .42, l'abilità cognitiva a .31. Un autoquestionario sulla performance vale molto meno di così.</p>
+          <p><strong>Non sa negoziare.</strong> Una quota rilevante della retribuzione effettiva dipende dal momento dell'assunzione, dalla forza contrattuale e dalla storia individuale. Questo è il motivo per cui la banda è larga.</p>
+        </div>
+      </div>
+
+      <details class="meth">
+        <summary>Metodo, calibrazione e limiti</summary>
+        <div class="meth-body">
+          <p style="font-size:14.5px;color:var(--ink2);max-width:68ch;line-height:1.6">Lo strumento replica, in forma semplificata, la catena che le aziende usano davvero: <strong>job evaluation a punti → grade → midpoint di mercato → ampiezza di banda → posizionamento individuale</strong>.</p>
+
+          <h3 style="font-size:15px;margin:24px 0 4px">1. Pesatura della posizione</h3>
+          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Sette fattori per un totale di 100 punti, con pesi ispirati alle metodologie point-factor consolidate (Hay/Korn Ferry: know-how, problem solving, accountability; Mercer IPE; WTW GGS) e ai quattro criteri resi normativi dalla direttiva UE 2023/970 — competenze, impegno, responsabilità, condizioni di lavoro.</p>
+          <table class="tbl"><thead><tr><th>Fattore</th><th>Punti max</th><th>Corrisponde a</th></tr></thead><tbody>
+            <tr><td>Competenze e know-how</td><td class="n">22</td><td>Competenze</td></tr>
+            <tr><td>Problem solving</td><td class="n">18</td><td>Competenze / impegno</td></tr>
+            <tr><td>Impatto economico</td><td class="n">18</td><td>Responsabilità</td></tr>
+            <tr><td>Autonomia decisionale</td><td class="n">15</td><td>Responsabilità</td></tr>
+            <tr><td>Responsabilità su persone</td><td class="n">12</td><td>Responsabilità</td></tr>
+            <tr><td>Interfaccia e influenza</td><td class="n">8</td><td>Competenze trasversali</td></tr>
+            <tr><td>Condizioni di lavoro</td><td class="n">7</td><td>Condizioni di lavoro</td></tr>
+          </tbody></table>
+
+          <h3 style="font-size:15px;margin:24px 0 4px">2. Da punti a midpoint</h3>
+          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Il punteggio mappa su 15 fasce con progressione del midpoint tra il 9% e il 20% — coerente con il 10–14% tipico delle strutture retributive, allargato in alto per riflettere la forte dispersione apicale italiana. La curva è ancorata ai dati JobPricing 2025 sul settore privato: RAL media 32.991 €, operai 27.909 €, impiegati 34.635 €, quadri 58.551 €, dirigenti 106.556 €.</p>
+
+          <h3 style="font-size:15px;margin:24px 0 4px">3. Moltiplicatori di contesto</h3>
+          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Settore, area e dimensione aziendale sono applicati moltiplicativamente al midpoint. Sono attenuati rispetto ai divari grezzi osservati (es. micro 28.610 € contro grandi imprese 39.021 €, Nord–Sud circa 4.400 € pari al 15%) perché una parte di quei divari dipende dalla diversa composizione dei ruoli, non dal prezzo dello stesso ruolo. Il prodotto dei tre moltiplicatori viene inoltre compresso con un esponente 0,75, per evitare che tre scelte estreme nella stessa direzione si sommino in modo irrealistico.</p>
+          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Sul fondo della scala è applicato un pavimento di circa 18.800 € full time, che è l'ordine di grandezza dei minimi tabellari più bassi in essere. È una salvaguardia grossolana: <strong>non sostituisce la verifica del minimo del CCNL effettivamente applicato</strong>, che è l'unico dato vincolante.</p>
+
+          <h3 style="font-size:15px;margin:24px 0 4px">4. Ampiezza della banda</h3>
+          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Semiampiezza dal 15% al 26% attorno al midpoint, crescente con la fascia: corrisponde a un range spread del 35% per i ruoli esecutivi fino a circa il 70% per i ruoli apicali, in linea con il 40–60% tipico dei ruoli professional e con l'80%+ delle bande executive.</p>
+
+          <h3 style="font-size:15px;margin:24px 0 4px">5. Posizionamento individuale</h3>
+          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Otto fattori individuali sommano uno scostamento che viene compresso con una funzione tangente iperbolica, in modo che il compa-ratio resti nell'intervallo 0,78–1,22. Il profilo dell'esperienza è concavo, come nell'equazione di Mincer, dove i rendimenti crescono e poi si appiattiscono. L'anzianità aziendale entra con segno negativo perché la compressione retributiva penalizza sistematicamente chi resta a lungo senza cambio di ruolo.</p>
+
+          <h3 style="font-size:15px;margin:24px 0 4px">Limiti dichiarati</h3>
+          <ul style="font-size:14px;color:var(--ink2);max-width:68ch;padding-left:18px">
+            <li>Copre il <strong>lavoro dipendente del settore privato in Italia</strong>. Partite IVA, soci lavoratori e pubblico impiego seguono logiche diverse.</li>
+            <li>Stima la <strong>RAL fissa</strong>. Il variabile è indicato a parte: in Italia lo percepisce solo il 37,4% dei dipendenti.</li>
+            <li>Non sostituisce una salary survey. Le survey commerciali (Mercer, WTW, JobPricing) lavorano su dati aziendali verificati e mappati su grade, non su autodichiarazioni.</li>
+            <li>Non tiene conto dei <strong>minimi tabellari del CCNL applicato</strong>, che restano il pavimento inderogabile e vanno sempre verificati.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Calibrazione basata su: Osservatorio JobPricing, JP Salary Outlook 2026 (dati 2025); decomposizioni AKM della varianza salariale (Card–Heining–Kline e letteratura successiva, incluso il manifatturiero italiano); Sackett et al. 2022 sulla validità dei predittori di performance; metodologie di job evaluation Hay/Korn Ferry, Mercer IPE, WTW GGS; direttiva (UE) 2023/970 e D.Lgs. 96/2026.</p>
+    <p>Stima statistica a scopo informativo. Non è una consulenza retributiva, legale o contrattuale, e non tiene conto della tua situazione specifica. Nessun dato lascia il browser: il calcolo avviene interamente in locale e nulla viene salvato.</p>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ============================================================
+   MODELLO
+   ============================================================ */
+
+const ROLE_Q = [
+  { id:"know", label:"Competenze e know-how richiesti dalla posizione",
+    hint:"Quanto tempo serve a una persona capace per diventare pienamente operativa in questo ruolo.",
+    opts:[
+      ["Mansioni semplici, apprese in pochi giorni",2],
+      ["Mestiere o procedura definita, richiede una qualifica professionale",7],
+      ["Competenza tecnica specialistica, 2–4 anni per padroneggiarla",12],
+      ["Expertise avanzata su più aree, riconosciuta all'interno dell'organizzazione",17],
+      ["Expertise rara o di frontiera, riferimento riconosciuto nel settore",22]
+    ]},
+  { id:"prob", label:"Natura dei problemi da risolvere",
+    hint:"Quanto sono nuovi e mal definiti i problemi che il ruolo affronta ogni settimana.",
+    opts:[
+      ["Ripetitivi, con soluzione già definita",2],
+      ["Noti, richiedono di scegliere tra soluzioni esistenti",6],
+      ["Variabili, richiedono analisi e adattamento caso per caso",10],
+      ["Nuovi, senza precedenti interni a cui appoggiarsi",14],
+      ["Strategici e ambigui, dove va definito anche il problema",18]
+    ]},
+  { id:"auto", label:"Autonomia decisionale",
+    hint:"Quanto del proprio lavoro il ruolo decide da sé, e quanto gli viene assegnato.",
+    opts:[
+      ["Istruzioni dettagliate e supervisione costante",1],
+      ["Obiettivi assegnati, metodo di lavoro definito da altri",4],
+      ["Obiettivi assegnati, metodo scelto autonomamente",8],
+      ["Definisce gli obiettivi della propria area",12],
+      ["Definisce strategia e vincoli entro cui operano altri",15]
+    ]},
+  { id:"peop", label:"Responsabilità su persone",
+    hint:"Riporti gerarchici formali, non collaborazioni.",
+    opts:[
+      ["Nessuna responsabilità gerarchica",0],
+      ["Coordinamento informale o affiancamento di 1–3 persone",3],
+      ["Responsabile diretto di 1–5 persone",6],
+      ["Responsabile di 6–25 persone",9],
+      ["Responsabile di oltre 25 persone, o di altri responsabili",12]
+    ]},
+  { id:"econ", label:"Impatto economico",
+    hint:"Budget, portafoglio, volume d'acquisto o fatturato su cui il ruolo risponde direttamente.",
+    opts:[
+      ["Nessuna responsabilità diretta su numeri",1],
+      ["Contribuisce ai risultati di un team, senza budget proprio",5],
+      ["Risponde di un budget o portafoglio fino a circa 500 mila €",9],
+      ["Risponde di un budget o portafoglio fino a circa 5 milioni €",13],
+      ["Risponde di oltre 5 milioni €, o di un conto economico",18]
+    ]},
+  { id:"infl", label:"Interfaccia e influenza",
+    hint:"Con chi il ruolo deve trattare, e con quale posta in gioco.",
+    opts:[
+      ["Prevalentemente dentro il proprio team",1],
+      ["Interfunzionale, con altre aree dell'azienda",3],
+      ["Clienti o fornitori esterni, su questioni operative",5],
+      ["Negoziazione con controparti esterne rilevanti, o rappresentanza dell'azienda",8]
+    ]},
+  { id:"cond", label:"Condizioni di lavoro",
+    hint:"Fattori ambientali e organizzativi gravosi. La direttiva UE li considera un criterio a sé.",
+    opts:[
+      ["Ufficio o ambiente standard, orario regolare",0],
+      ["Trasferte frequenti o reperibilità",3],
+      ["Turni, lavoro notturno o festivo",5],
+      ["Rischio fisico, ambiente gravoso, o più fattori insieme",7]
+    ]}
+];
+
+const SECTORS = [
+  ["Banche, assicurazioni e servizi finanziari",1.18],
+  ["Energia, utilities, oil & gas",1.14],
+  ["Farmaceutico, biomedicale, dispositivi medici",1.14],
+  ["IT, software, digital, telecomunicazioni",1.12],
+  ["Ingegneria, impiantistica, aerospazio",1.08],
+  ["Chimica e materiali",1.08],
+  ["Consulenza e servizi professionali",1.06],
+  ["Automotive, meccanica, manifattura avanzata",1.02],
+  ["Manifattura tradizionale, moda, arredo, alimentare",0.98],
+  ["Pubblica amministrazione, sanità pubblica",0.97],
+  ["Costruzioni ed edilizia",0.95],
+  ["Trasporti e logistica",0.95],
+  ["Media, editoria, comunicazione, marketing",0.95],
+  ["Commercio, GDO, retail",0.92],
+  ["Istruzione, formazione, ricerca",0.92],
+  ["Agricoltura e agroalimentare primario",0.89],
+  ["Servizi alla persona, cooperative, terzo settore",0.88],
+  ["Turismo, ristorazione, hospitality",0.86]
+];
+
+const AREAS = [
+  ["Milano e area metropolitana",1.12],
+  ["Full remote per azienda estera, contratto italiano",1.15],
+  ["Lombardia (resto), Lazio, Liguria",1.05],
+  ["Emilia-Romagna",1.03],
+  ["Piemonte, Veneto, Friuli-Venezia Giulia, Trentino-Alto Adige, Valle d'Aosta",1.02],
+  ["Toscana, Marche, Umbria",0.97],
+  ["Abruzzo, Molise, Sardegna",0.92],
+  ["Campania, Puglia, Basilicata, Calabria, Sicilia",0.89]
+];
+
+const SIZES = [
+  ["Meno di 10 dipendenti",0.90],
+  ["10–49 dipendenti",0.95],
+  ["50–249 dipendenti",1.00],
+  ["250–999 dipendenti",1.05],
+  ["1.000–4.999 dipendenti",1.09],
+  ["5.000 dipendenti o più, o multinazionale",1.13]
+];
+
+const PT = [["Full time",1.00],["80% (es. 4 giorni)",0.80],["60%",0.60],["50% o meno",0.50]];
+
+const PERSON_Q = [
+  { id:"exp", label:"Anni di esperienza professionale rilevante per questo ruolo",
+    hint:"Il rendimento dell'esperienza cresce e poi si appiattisce: dopo i 15 anni smette quasi del tutto di tradursi in retribuzione.",
+    opts:[["Meno di 2 anni",-0.10],["2–4 anni",-0.05],["5–9 anni",0.00],["10–14 anni",0.04],["15–24 anni",0.06],["25 anni o più",0.05]]},
+  { id:"role", label:"Da quanto ricopri questo specifico ruolo",
+    hint:"La piena padronanza del ruolo si raggiunge tipicamente entro 4–7 anni.",
+    opts:[["Meno di 1 anno",-0.04],["1–3 anni",0.00],["4–7 anni",0.03],["8 anni o più",0.01]]},
+  { id:"ten", label:"Da quanto lavori nella stessa azienda",
+    hint:"Segno negativo voluto: chi resta a lungo senza cambio di ruolo tende ad accumulare ritardo rispetto al mercato.",
+    opts:[["Meno di 2 anni, o sono in cerca ora",0.03],["2–5 anni",0.00],["6–10 anni",-0.02],["Più di 10 anni",-0.04]]},
+  { id:"perf", label:"Come viene valutata la tua prestazione",
+    hint:"Vale solo se è un giudizio formalizzato o riconosciuto, non un'autopercezione.",
+    opts:[["Sotto le attese, o percorso in difficoltà",-0.07],["In linea con le attese",0.00],["Sopra le attese in modo riconosciuto",0.05],["Top performer: premi, promozioni rapide, retention mirata",0.10]]},
+  { id:"scar", label:"Quanto è facile trovare qualcuno con il tuo profilo",
+    hint:"Il premio da scarsità è, dopo il ruolo, la leva individuale più forte sulla RAL.",
+    opts:[["Molti candidati disponibili sul mercato",-0.05],["Domanda e offerta sostanzialmente in equilibrio",0.00],["Profilo difficile da trovare, ricerche lunghe",0.06],["Competenza rara, si cerca a livello internazionale",0.12]]},
+  { id:"edu", label:"Il tuo titolo di studio rispetto a quanto il ruolo richiede",
+    hint:"Peso volutamente basso: il livello di studi richiesto è già dentro la pesatura del ruolo.",
+    opts:[["Inferiore a quanto il ruolo richiederebbe",-0.03],["Allineato",0.00],["Superiore (magistrale, master, dottorato non richiesti)",0.02]]},
+  { id:"lang", label:"Lingue e dimensione internazionale del lavoro",
+    opts:[["Solo italiano",-0.02],["Inglese usato regolarmente al lavoro",0.03],["Due o più lingue straniere, o ruolo internazionale",0.05]]},
+  { id:"cert", label:"Abilitazioni o certificazioni richieste dal mercato",
+    hint:"Iscrizione a un albo, abilitazioni obbligatorie, certificazioni tecniche riconosciute e verificabili.",
+    opts:[["No",0.00],["Sì, e sono determinanti per accedere al ruolo",0.03]]}
+];
+
+/* Midpoint nazionale per fascia — azienda media, tutti i settori */
+const MID = [21500,23500,25800,28300,31200,34500,38500,43500,49500,56500,65000,76000,90000,108000,135000];
+const CUT = [8,15,22,29,36,43,50,57,64,70,76,82,88,94,100];
+const GRADE_LBL = ["Esecutivo base","Esecutivo","Esecutivo qualificato","Operativo","Operativo senior","Professional","Professional senior","Specialist / coordinamento","Specialist esperto / middle management","Quadro","Quadro senior","Management","Management senior","Direzione","Alta direzione"];
+
+function gradeOf(pts){ for(let i=0;i<CUT.length;i++) if(pts<=CUT[i]) return i; return 14; }
+function halfWidth(g){ if(g<=3) return 0.15; if(g<=7) return 0.18; if(g<=10) return 0.22; return 0.26; }
+
+/* Distribuzione RAL italiana, ancore percentili (settore privato) */
+const CDF = [[18000,.03],[21000,.10],[25500,.25],[29500,.50],[35000,.75],[40000,.90],[47000,.95],[60000,.98],[78000,.99],[110000,.995],[150000,.999]];
+function percentileOf(v){
+  if(v<=CDF[0][0]) return 2;
+  for(let i=1;i<CDF.length;i++){
+    if(v<=CDF[i][0]){
+      const [a,pa]=CDF[i-1],[b,pb]=CDF[i];
+      const t=(Math.log(v)-Math.log(a))/(Math.log(b)-Math.log(a));
+      return Math.round((pa+t*(pb-pa))*1000)/10;
+    }
+  }
+  return 99.9;
+}
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+
+const state = {};
+let n = 0;
+
+function fieldset(idx,q,group){
+  const fs=document.createElement("fieldset");
+  const legend=document.createElement("legend");legend.style.width="100%";
+  const head=document.createElement("div");head.className="q";
+  head.innerHTML='<span class="qlabel"><span class="qnum">'+String(idx).padStart(2,"0")+'</span>'+q.label+'</span>'+(q.hint?'<span class="qhint">'+q.hint+'</span>':'');
+  legend.appendChild(head);fs.appendChild(legend);
+  const box=document.createElement("div");box.className="opts";
+  q.opts.forEach((o,i)=>{
+    const lab=document.createElement("label");lab.className="opt";
+    const inp=document.createElement("input");
+    inp.type="radio";inp.name=group+"_"+q.id;inp.value=String(o[1]);
+    inp.addEventListener("change",()=>{
+      const first = state[group+"_"+q.id]===undefined;
+      state[group+"_"+q.id]=o[1];
+      if(first){n++;}
+      sync();
+    });
+    const dot=document.createElement("span");dot.className="dot";
+    const txt=document.createElement("span");txt.className="txt";txt.textContent=o[0];
+    lab.append(inp,dot,txt);box.appendChild(lab);
+  });
+  fs.appendChild(box);return fs;
+}
+
+function selectField(idx,id,label,hint,list){
+  const fs=document.createElement("fieldset");
+  const head=document.createElement("div");head.className="q";
+  head.innerHTML='<span class="qlabel"><span class="qnum">'+String(idx).padStart(2,"0")+'</span>'+label+'</span>'+(hint?'<span class="qhint">'+hint+'</span>':'');
+  fs.appendChild(head);
+  const wrap=document.createElement("div");wrap.className="selwrap";
+  const sel=document.createElement("select");sel.id="sel_"+id;
+  const ph=document.createElement("option");ph.value="";ph.textContent="Seleziona…";ph.disabled=true;ph.selected=true;
+  sel.appendChild(ph);
+  list.forEach(o=>{const op=document.createElement("option");op.value=String(o[1]);op.textContent=o[0];sel.appendChild(op);});
+  sel.addEventListener("change",()=>{
+    const first = state["ctx_"+id]===undefined;
+    state["ctx_"+id]=parseFloat(sel.value);
+    state["ctxlbl_"+id]=sel.options[sel.selectedIndex].textContent;
+    if(first) n++;
+    sync();
+  });
+  wrap.appendChild(sel);fs.appendChild(wrap);return fs;
+}
+
+let idx=0;
+const c1=document.getElementById("q1");
+ROLE_Q.forEach(q=>{idx++;c1.appendChild(fieldset(idx,q,"role"));});
+const c2=document.getElementById("q2");
+idx++;c2.appendChild(selectField(idx,"sec","Settore dell'azienda","Se l'azienda opera su più fronti, scegli quello che genera la maggior parte del fatturato.",SECTORS));
+idx++;c2.appendChild(selectField(idx,"area","Area geografica della sede di lavoro","Il divario Nord–Sud vale circa 4.400 € lordi annui a parità di contratto nazionale.",AREAS));
+idx++;c2.appendChild(selectField(idx,"size","Dimensione dell'azienda","In Italia la RAL media va da 28.610 € nelle microimprese a 39.021 € nelle grandi.",SIZES));
+idx++;c2.appendChild(selectField(idx,"pt","Impegno orario","La banda viene riproporzionata sulla percentuale di orario pieno.",PT));
+const c3=document.getElementById("q3");
+PERSON_Q.forEach(q=>{idx++;c3.appendChild(fieldset(idx,q,"pers"));});
+
+const TOT = ROLE_Q.length + 4 + PERSON_Q.length;
+
+function sync(){
+  document.getElementById("proglbl").textContent = n + " di " + TOT + " risposte";
+  document.getElementById("fill").style.width = (n/TOT*100)+"%";
+  const btn=document.getElementById("calc");
+  btn.disabled = n<TOT;
+  if(n>=TOT && document.getElementById("out").classList.contains("on")) compute(false);
+}
+
+/* ============================================================
+   CALCOLO
+   ============================================================ */
+
+const eur = v => new Intl.NumberFormat("it-IT",{maximumFractionDigits:0}).format(Math.round(v/100)*100);
+
+function compute(scroll){
+  let pts=0; ROLE_Q.forEach(q=>pts+=state["role_"+q.id]);
+  const g = gradeOf(pts);
+  /* i tre moltiplicatori si compongono in modo attenuato: parte del divario grezzo
+     osservato tra settori, aree e dimensioni dipende dal diverso mix di ruoli */
+  const ctxMul = Math.pow(state.ctx_sec*state.ctx_area*state.ctx_size, 0.75);
+  const ptFactor = state.ctx_pt;
+  const FLOOR = 18800*ptFactor;   /* ordine di grandezza dei minimi tabellari più bassi, full time */
+  const w = halfWidth(g);
+  const mid = Math.max(MID[g]*ctxMul*ptFactor, FLOOR/(1-w));
+  const bMin = mid*(1-w), bMax = mid*(1+w);
+
+  let raw=0; PERSON_Q.forEach(q=>raw+=state["pers_"+q.id]);
+  const compa = 1 + 0.22*Math.tanh(raw/0.22);
+  const point = Math.max(mid*compa, FLOOR);
+
+  const u = Math.min(0.16, Math.max(0.08, 0.09 + 0.004*(g-6)));
+  const pLo = Math.max(point*(1-u), FLOOR), pHi = point*(1+u);
+
+  const pen = (point-bMin)/(bMax-bMin);
+  const pct = percentileOf(point/ptFactor);
+
+  document.getElementById("lo").textContent=eur(pLo);
+  document.getElementById("hi").textContent=eur(pHi);
+
+  const bandName = GRADE_LBL[g];
+  document.getElementById("subline").innerHTML =
+    "Fascia <strong>"+(g+1)+" di 15</strong> — "+bandName.toLowerCase()+" — con "+pts+" punti di pesatura su 100. "+
+    "La banda di mercato completa per questo ruolo, in questo contesto, va da <strong>"+eur(bMin)+" €</strong> a <strong>"+eur(bMax)+" €</strong>"+
+    (ptFactor<1?" (già riproporzionata sull'orario indicato)":"")+".";
+
+  drawScale(bMin,mid,bMax,pLo,point,pHi);
+
+  const mBox=document.getElementById("metrics");
+  mBox.innerHTML="";
+  const cr = compa.toFixed(2).replace(".",",");
+  const metric=(k,v,d)=>{const e=document.createElement("div");e.className="m";
+    e.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+'</div><div class="d">'+d+'</div>';mBox.appendChild(e);};
+  metric("Punto centrale","€ "+eur(point),"La stima singola più probabile, prima di aggiungere l'incertezza");
+  metric("Midpoint del ruolo","€ "+eur(mid),"Il valore di mercato della posizione, indipendente dalla persona");
+  metric("Compa-ratio",cr,"Rapporto tra la tua stima e il midpoint. Zona normale: 0,90–1,10");
+  metric("Posizione in banda",Math.round(Math.max(0,Math.min(1,pen))*100)+"%","Dove ti collochi tra minimo e massimo della banda");
+  metric("Percentile nazionale",String(pct).replace(".",",")+"°","Quota di dipendenti del privato che guadagna meno di così");
+  metric("Ampiezza banda",Math.round((bMax-bMin)/bMin*100)+"%","Range spread della fascia, crescente con il livello del ruolo");
+
+  /* interpretazione */
+  const read=document.getElementById("read");
+  let t="";
+  if(pen<0.15) t="<p>Ti collochi <strong>nella parte bassa della banda</strong>. È la posizione normale per chi è entrato da poco nel ruolo: c'è spazio di crescita senza bisogno di cambiare posizione. Se invece sei nel ruolo da anni, questo è il segnale classico di una compressione retributiva da correggere.</p>";
+  else if(pen<0.4) t="<p>Ti collochi nel <strong>primo terzo della banda</strong>. Nelle politiche di merito è la fascia che riceve gli incrementi percentuali più alti, proprio per riallineare chi sta sotto il midpoint.</p>";
+  else if(pen<0.68) t="<p>Ti collochi <strong>attorno al midpoint</strong>. È il posizionamento previsto per una persona pienamente competente nel ruolo e con prestazione in linea: il compa-ratio in zona 0,90–1,10 è quello che la maggior parte delle strutture retributive considera corretto.</p>";
+  else if(pen<0.9) t="<p>Ti collochi <strong>nella parte alta della banda</strong>. È coerente con una lunga permanenza nel ruolo o con una prestazione sopra le attese, ma significa anche che lo spazio di crescita economica <em>dentro</em> questa posizione si sta esaurendo: da qui in avanti la leva è un ruolo di peso maggiore.</p>";
+  else t="<p>Sei <strong>al tetto della banda o oltre</strong>. In una struttura retributiva formalizzata questa situazione viene gestita come eccezione: o il ruolo è stato pesato al ribasso rispetto a quello che fai davvero, o l'aumento successivo passa necessariamente da una promozione.</p>";
+
+  if(pct>=90) t+="<p>Rispetto al mercato italiano nel suo complesso sei in una posizione molto alta: quasi il 90% dei dipendenti del settore privato non supera i 40.000 € lordi annui, e il 75% resta sotto i 35.000. Questo dice più sulla compressione dei salari italiani che sul tuo profilo.</p>";
+  else if(pct<=25) t+="<p>Sei nella parte bassa della distribuzione nazionale. Vale la pena verificare due cose prima di trarre conclusioni: il minimo tabellare del CCNL applicato, e se il ruolo che svolgi davvero corrisponde a quello per cui sei inquadrato.</p>";
+  read.innerHTML=t;
+
+  /* segnalazioni */
+  const flags=document.getElementById("flags");
+  let f="";
+  if(bMin < 22000){
+    f+='<div class="callout warn"><p><strong>Verifica il minimo tabellare.</strong> A questo livello la banda si avvicina alla soglia in cui il pavimento contrattuale conta più del mercato. Il minimo del CCNL applicato prevale sempre — e la Cassazione ha stabilito che un giudice può anche discostarsi da quel minimo, se contrasta con i criteri di proporzionalità e sufficienza dell\'art. 36 della Costituzione.</p></div>';
+  }
+  if(g>=8){
+    const vlo = g>=12?15:(g>=10?10:8), vhi = g>=12?35:(g>=10?20:15);
+    f+='<div class="callout"><p><strong>Il variabile non è compreso.</strong> A questo livello di ruolo una componente variabile è la norma: indicativamente tra il '+vlo+'% e il '+vhi+'% della RAL, che porterebbe la retribuzione globale annua verso € '+eur(point*(1+vlo/100))+'–'+eur(point*(1+vhi/100))+'. Attenzione però: in Italia solo il 37,4% dei dipendenti percepisce una quota variabile.</p></div>';
+  }
+  if(state.ctx_pt<1){
+    f+='<div class="callout"><p><strong>Banda riproporzionata.</strong> Tutti i valori mostrati sono già riparametrati sull\'orario che hai indicato. L\'equivalente full time del tuo punto centrale sarebbe circa € '+eur(point/state.ctx_pt)+'.</p></div>';
+  }
+  f+='<div class="callout"><p><strong>Dal 7 giugno 2026 questa banda te la devono dire.</strong> Il D.Lgs. 96/2026, che recepisce la direttiva UE 2023/970, obbliga i datori di lavoro a indicare la retribuzione iniziale o la fascia retributiva già nell\'annuncio, e vieta di chiedere ai candidati quanto guadagnavano prima. In caso di contenzioso sulla parità retributiva l\'onere della prova è a carico del datore, che deve dimostrare che le differenze poggiano su criteri oggettivi.</p></div>';
+  if(f) f='<h3>Segnalazioni</h3>'+f;
+  flags.innerHTML=f;
+
+  const out=document.getElementById("out");
+  out.classList.add("on");
+  if(scroll) out.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+}
+
+/* ============================================================
+   SCALA
+   ============================================================ */
+
+const AX_MIN=18000, AX_MAX=200000, X0=8, X1=892;
+function xOf(v){
+  const t=(Math.log(Math.max(AX_MIN,Math.min(AX_MAX,v)))-Math.log(AX_MIN))/(Math.log(AX_MAX)-Math.log(AX_MIN));
+  return X0+t*(X1-X0);
+}
+
+let LAST=null;
+function drawScale(bMin,mid,bMax,pLo,point,pHi){
+  LAST=[bMin,mid,bMax,pLo,point,pHi];
+  const NS="http://www.w3.org/2000/svg";
+  const svg=document.getElementById("viz");
+  Array.prototype.slice.call(svg.children).forEach(function(e){
+    if(e.tagName.toLowerCase()!=="title") svg.removeChild(e);
+  });
+  /* il viewBox è largo 900: su schermi stretti il disegno viene rimpicciolito,
+     quindi allunghiamo la geometria verticale e i corpi tipografici della stessa quantità */
+  const contentW = Math.min(window.innerWidth, 900) - 44;
+  const S = Math.max(1, Math.min(2.7, 900/Math.max(280,contentW)));
+  const y = v => v*S;
+  const fs = v => (v*S).toFixed(1);
+
+  const add=(tag,attrs,text)=>{const e=document.createElementNS(NS,tag);
+    for(const k in attrs) e.setAttribute(k,attrs[k]);
+    if(text!==undefined) e.textContent=text; svg.appendChild(e); return e;};
+
+  const AXIS=y(150), MONO="IBM Plex Mono, monospace";
+
+  /* distribuzione nazionale */
+  add("rect",{x:xOf(21000),y:y(96),width:xOf(40000)-xOf(21000),height:y(34),fill:"#E9EBE6"});
+  add("line",{x1:xOf(29500),x2:xOf(29500),y1:y(96),y2:y(130),stroke:"#C3C7BF","stroke-width":1.5*S});
+  if(S<1.8) add("text",{x:xOf(29500),y:y(88),"text-anchor":"middle","font-family":MONO,"font-size":fs(10.5),fill:"#6E747B"},"mediana Italia");
+
+  /* banda di mercato del ruolo */
+  const xa=xOf(bMin), xb=xOf(bMax);
+  add("rect",{x:xa,y:y(52),width:Math.max(2,xb-xa),height:y(44),fill:"#B9C6F4"});
+  add("line",{x1:xOf(mid),x2:xOf(mid),y1:y(52),y2:y(96),stroke:"#1F4FD8","stroke-width":2*S});
+  const lbl={"font-family":MONO,"font-size":fs(11),fill:"#1F4FD8","dominant-baseline":"middle"};
+  const pad=7*S, gap=78*S;
+  /* le etichette stanno sempre fuori dalla banda; se non c'è spazio ai lati
+     salgono sulla riga sopra, ancorate al bordo — non finiscono mai una sull'altra */
+  if(xa-X0>gap) add("text",Object.assign({},lbl,{x:xa-pad,y:y(74),"text-anchor":"end"}),"€ "+eur(bMin));
+  else          add("text",Object.assign({},lbl,{x:X0,y:y(40),"text-anchor":"start"}),"€ "+eur(bMin));
+  if(X1-xb>gap) add("text",Object.assign({},lbl,{x:xb+pad,y:y(74),"text-anchor":"start"}),"€ "+eur(bMax));
+  else          add("text",Object.assign({},lbl,{x:X1,y:y(40),"text-anchor":"end"}),"€ "+eur(bMax));
+
+  /* stima per la persona */
+  add("rect",{x:xOf(pLo),y:y(16),width:Math.max(3,xOf(pHi)-xOf(pLo)),height:y(8),fill:"#8A2846",opacity:"0.28"});
+  add("line",{x1:xOf(point),x2:xOf(point),y1:y(8),y2:y(100),stroke:"#8A2846","stroke-width":2.5*S});
+  add("circle",{cx:xOf(point),cy:y(8),r:4*S,fill:"#8A2846"});
+  const px=xOf(point), edge=100*S;
+  add("text",{x:px,y:y(-6),"text-anchor":px>X1-edge?"end":(px<X0+edge?"start":"middle"),
+    "font-family":MONO,"font-size":fs(12),"font-weight":"600",fill:"#8A2846"},"€ "+eur(point));
+
+  /* asse */
+  add("line",{x1:X0,x2:X1,y1:AXIS,y2:AXIS,stroke:"#D6D9D3","stroke-width":1*S});
+  const ticks = S>1.8 ? [20,30,50,80,140,200] : [20,25,30,40,50,60,80,100,140,200];
+  ticks.forEach(k=>{
+    const x=xOf(k*1000);
+    add("line",{x1:x,x2:x,y1:AXIS,y2:AXIS+y(6),stroke:"#D6D9D3","stroke-width":1*S});
+    add("text",{x:x,y:AXIS+y(21),"text-anchor":"middle","font-family":MONO,"font-size":fs(10.5),fill:"#6E747B"},k+"k");
+  });
+  add("text",{x:X0,y:AXIS+y(42),"font-family":MONO,"font-size":fs(10),fill:"#9AA0A6","letter-spacing":1.4*S},
+      "RAL LORDA ANNUA — SCALA LOGARITMICA");
+
+  svg.setAttribute("viewBox","0 "+y(-24)+" 900 "+y(224));
+}
+
+let rz;
+window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{if(LAST) drawScale.apply(null,LAST);},180);});
+
+document.getElementById("calc").addEventListener("click",()=>compute(true));
+sync();
+</script>
+</body>
+</html>
