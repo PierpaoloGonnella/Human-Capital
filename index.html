@@ -6,176 +6,224 @@
 <title>Banda retributiva attesa — strumento di stima</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..900&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F4F5F2;
-  --card:#FFFFFF;
-  --ink:#14171C;
-  --ink2:#3B424B;
-  --muted:#6E747B;
-  --rule:#D6D9D3;
-  --rule2:#E9EBE6;
-  --cobalt:#1F4FD8;
-  --cobalt-soft:#E5EAFC;
-  --cobalt-mid:#B9C6F4;
-  --plum:#8A2846;
-  --plum-soft:#F5E4EA;
-  --amber:#8A5A16;
-  --r:3px;
-  --maxw:900px;
+  --ink:#14161A;
+  --ink2:#454B53;
+  --muted:#6E757E;
+  --hair:rgba(20,22,26,.13);
+  --hair2:rgba(20,22,26,.08);
+  --edge:rgba(255,255,255,.55);
+  --pane:rgba(224,228,232,.34);
+  --pane-hi:rgba(228,232,236,.46);
+  --rosso:#C8102E;
+  --steel:#4E5A6B;
+  --pad:34px;
+  --r:20px;
+  --rs:11px;
+  --maxw:980px;
+  --disp:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --sans:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --blur:blur(34px) saturate(1.8);
+  --lift:0 1px 1px rgba(20,22,26,.04), 0 18px 44px -28px rgba(20,22,26,.55);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:16px;line-height:1.55;
+  margin:0;background-color:#DFE2E5;color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
-h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;margin:0;letter-spacing:-0.02em}
-.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
-.eyebrow{
-  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--muted);
+/* la foto resta protagonista: velo leggero e costante, non un fondo pieno.
+   La leggibilità la garantiscono le lastre di vetro, non l'opacità dello sfondo */
+body::before{
+  content:"";position:fixed;inset:-3%;z-index:-2;
+  background:url("https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2400&auto=format&fit=crop") center/cover no-repeat;
+  filter:saturate(.34) contrast(1.03) blur(2px);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1300px 800px at 78% -10%, rgba(255,255,255,.30), transparent 66%),
+    linear-gradient(180deg, rgba(214,218,222,.16) 0%, rgba(214,218,222,.30) 40%, rgba(212,216,221,.36) 100%);
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+
+/* ---- la lastra: unica superficie di lettura di tutta la pagina ---- */
+.hd,.steps,fieldset,.readout,.scale,details.meth,.block,footer>.wrap{
+  background:var(--pane);
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--edge);border-radius:var(--r);box-shadow:var(--lift);
 }
 
-/* ---------- header ---------- */
-header{border-bottom:1px solid var(--rule);background:var(--card)}
-.hd{padding:44px 0 34px}
+h1,h2{font-family:var(--disp);margin:0}
+h3{font-family:var(--disp);margin:0;font-weight:700;letter-spacing:-.015em}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- testata ---------- */
+header{border:0}
+.hd{padding:64px var(--pad) 54px;margin-top:30px}
+.hd .filet{width:38px;height:3px;background:var(--rosso);margin:20px 0 26px;border-radius:2px}
 .hd h1{
-  font-size:clamp(30px,6.2vw,52px);line-height:1.02;font-weight:800;
-  font-stretch:112%;margin:14px 0 0;max-width:16ch;
+  font-size:clamp(40px,6.6vw,74px);line-height:1;font-weight:800;
+  font-variation-settings:"wdth" 110;letter-spacing:-.04em;max-width:18ch;text-wrap:balance;
 }
-.hd h1 em{font-style:normal;color:var(--cobalt)}
-.standfirst{margin:18px 0 0;max-width:56ch;color:var(--ink2);font-size:17px}
-.hd .note{margin-top:20px;font-size:13.5px;color:var(--muted);max-width:62ch}
+.hd h1 em{font-style:normal;font-weight:300;color:var(--ink2);letter-spacing:-.03em}
+.standfirst{margin:28px 0 0;max-width:54ch;color:var(--ink2);font-size:17.5px;line-height:1.6}
+.hd .note{margin-top:22px;font-size:13.5px;color:var(--muted);max-width:62ch;line-height:1.62}
 
-/* ---------- steps ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--rule)}
-.step{padding:18px 20px 20px;border-right:1px solid var(--rule)}
-.step:last-child{border-right:0}
-.step .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--cobalt);letter-spacing:.12em}
-.step h3{font-size:14.5px;font-weight:700;margin:6px 0 4px;font-stretch:105%}
-.step p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}
+/* ---------- le tre parti ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);max-width:var(--maxw);margin:12px auto 0;padding:26px var(--pad) 28px}
+.step{padding:0 22px;border-right:1px solid var(--hair2)}
+.step:first-child{padding-left:0}
+.step:last-child{padding-right:0;border-right:0}
+.step .n{font-family:var(--mono);font-size:10px;color:var(--rosso);letter-spacing:.22em}
+.step h3{font-size:15.5px;margin:11px 0 7px}
+.step p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
 
-/* ---------- form ---------- */
-main{padding:0 0 40px}
-.part{padding:46px 0 6px}
-.part-hd{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:6px}
-.part-hd .idx{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--cobalt);letter-spacing:.1em;flex:none}
-.part-hd h2{font-size:clamp(20px,3.4vw,27px);font-weight:800;font-stretch:108%}
-.part-sub{font-size:14px;color:var(--muted);margin:12px 0 26px;max-width:66ch}
+/* ---------- questionario ---------- */
+main{padding:0 0 30px}
+.part{padding:66px 0 4px}
+/* i titoli di sezione galleggiano sulla foto: corpo grande e pieno, non serve la lastra */
+.part-hd{display:flex;align-items:baseline;gap:18px;padding:0 var(--pad) 14px;border-bottom:1px solid var(--hair)}
+.part-hd .idx{font-family:var(--mono);font-size:10.5px;color:var(--rosso);letter-spacing:.22em;flex:none}
+.part-hd h2{font-size:clamp(26px,4.6vw,40px);font-weight:800;font-variation-settings:"wdth" 108;letter-spacing:-.037em}
+.part-sub{font-size:15px;color:var(--ink2);margin:16px 0 26px;padding:0 var(--pad);max-width:calc(66ch + var(--pad));line-height:1.6}
 
-fieldset{border:0;margin:0 0 14px;padding:0;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r)}
-fieldset>.q{padding:16px 18px 4px}
+fieldset{margin:0 0 12px;padding:0;transition:border-color .22s,box-shadow .22s,background .22s}
+fieldset:hover{background:var(--pane-hi)}
+fieldset:focus-within{border-color:rgba(200,16,46,.42);box-shadow:0 20px 46px -26px rgba(20,22,26,.6)}
+fieldset .q{padding:22px var(--pad) 4px}
 legend{padding:0;display:block;float:left;width:100%}
-.qlabel{display:block;font-weight:600;font-size:15.5px;letter-spacing:-0.01em}
-.qhint{display:block;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.45}
-.qnum{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--cobalt);margin-right:8px}
-.opts{clear:both;padding:12px 18px 18px;display:flex;flex-direction:column;gap:0}
-.opt{position:relative;display:flex;align-items:flex-start;gap:11px;padding:9px 10px;border-radius:var(--r);cursor:pointer;border:1px solid transparent}
+/* numero e testo come due colonne flex: il rientro sporgente con text-indent
+   veniva disegnato fuori dal riquadro pur misurando correttamente */
+.qlabel{display:flex;align-items:baseline;gap:12px;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:-.02em;color:var(--ink)}
+.qhint{display:block;font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5;padding-left:28px}
+.qnum{font-family:var(--mono);font-size:10.5px;font-weight:400;color:var(--rosso);letter-spacing:.1em;
+      flex:none;width:16px}
+.opts{clear:both;padding:14px calc(var(--pad) - 12px) 22px;display:flex;flex-direction:column}
+.opt{position:relative;display:flex;align-items:flex-start;gap:13px;padding:11px 12px;border-radius:var(--rs);cursor:pointer;transition:background .15s}
 .opt+.opt{margin-top:2px}
-.opt:hover{background:var(--paper)}
+.opt:hover{background:rgba(255,255,255,.38)}
 .opt input{position:absolute;opacity:0;width:1px;height:1px}
-.dot{flex:none;width:15px;height:15px;margin-top:3px;border:1.5px solid var(--rule);border-radius:50%;background:#fff;transition:border-color .12s,box-shadow .12s}
-.opt input:checked~.dot{border-color:var(--cobalt);box-shadow:inset 0 0 0 3.5px var(--cobalt)}
-.opt input:focus-visible~.dot{outline:2px solid var(--cobalt);outline-offset:3px}
-.opt span.txt{font-size:14.5px;line-height:1.42;color:var(--ink2)}
+.dot{flex:none;width:15px;height:15px;margin-top:4px;border:1.5px solid rgba(20,22,26,.25);border-radius:50%;background:rgba(255,255,255,.55);transition:box-shadow .16s,border-color .16s}
+.opt input:checked~.dot{border-color:var(--rosso);box-shadow:inset 0 0 0 4px var(--rosso)}
+.opt input:focus-visible~.dot{outline:2px solid var(--rosso);outline-offset:3px}
+.opt span.txt{font-size:14.5px;line-height:1.45;color:var(--ink2)}
 .opt input:checked~span.txt{color:var(--ink);font-weight:500}
+.selwrap{padding:0 var(--pad) 8px}
 select{
-  font-family:"Inter Tight",sans-serif;font-size:15px;color:var(--ink);
-  width:100%;padding:11px 12px;border:1px solid var(--rule);border-radius:var(--r);
-  background:#fff;margin:2px 0 18px;
+  font-family:var(--sans);font-size:15px;color:var(--ink);width:100%;padding:13px 14px;
+  border:1px solid var(--hair);border-radius:var(--rs);background:rgba(255,255,255,.42);margin:4px 0 16px;
 }
-select:focus-visible{outline:2px solid var(--cobalt);outline-offset:1px}
-.selwrap{padding:0 18px}
+select:focus-visible{outline:2px solid var(--rosso);outline-offset:1px}
 
-/* ---------- action bar ---------- */
-.bar{position:sticky;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--rule);
-     box-shadow:0 -6px 22px rgba(20,23,28,.06)}
-.bar-in{max-width:var(--maxw);margin:0 auto;padding:13px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.prog{flex:1;min-width:170px}
-.prog .lbl{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
-.track{height:3px;background:var(--rule2);margin-top:7px;border-radius:2px;overflow:hidden}
-.fill{height:100%;width:0;background:var(--cobalt);transition:width .25s ease}
+/* ---------- barra azione, sospesa ---------- */
+.bar{position:sticky;bottom:0;z-index:20;padding:0 26px 18px;background:none;border:0}
+.bar-in{
+  max-width:calc(var(--maxw) - 52px);margin:0 auto;padding:13px 13px 13px 26px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;border-radius:999px;
+  background:rgba(226,230,234,.7);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--edge);box-shadow:0 16px 42px -20px rgba(20,22,26,.65);
+}
+.prog{flex:1;min-width:160px;padding-left:2px}
+.prog .lbl{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+.track{height:2px;background:var(--hair2);margin-top:10px;border-radius:2px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--rosso);transition:width .3s cubic-bezier(.4,0,.2,1)}
 button.go{
-  font-family:"Archivo",sans-serif;font-weight:700;font-size:15px;font-stretch:105%;
-  padding:13px 26px;border:0;border-radius:var(--r);background:var(--ink);color:#fff;cursor:pointer;
-  letter-spacing:-0.01em;transition:background .15s;
+  font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:-.012em;
+  padding:15px 32px;border:0;border-radius:999px;cursor:pointer;color:#F7F7F8;background:var(--ink);
+  transition:background .18s,transform .12s;
 }
-button.go:hover:not(:disabled){background:var(--cobalt)}
-button.go:disabled{background:var(--rule);color:#8B9098;cursor:not-allowed}
-button.go:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+button.go:hover:not(:disabled){background:#000}
+button.go:active:not(:disabled){transform:scale(.985)}
+button.go:disabled{background:rgba(20,22,26,.12);color:#8E959D;cursor:not-allowed}
+button.go:focus-visible{outline:2px solid var(--rosso);outline-offset:3px}
 
-/* ---------- results ---------- */
-#out{display:none;border-top:1px solid var(--rule);background:var(--card);padding:0 0 60px;margin-top:34px}
+/* ---------- risultati ---------- */
+#out{display:none;padding:0 0 70px;margin-top:40px}
 #out.on{display:block}
-.readout{padding:44px 0 8px}
-.readout .eyebrow{margin-bottom:14px;display:block}
-.big{font-family:"Archivo",sans-serif;font-weight:800;font-stretch:118%;
-     font-size:clamp(34px,8vw,68px);line-height:1;letter-spacing:-0.035em;color:var(--plum);
-     font-variant-numeric:tabular-nums}
-.big .sep{color:var(--rule);font-weight:400;padding:0 .12em}
-.big .cur{font-size:.44em;font-weight:600;vertical-align:.28em;letter-spacing:0;color:var(--ink2)}
-.readout .sub{margin-top:12px;font-size:15px;color:var(--ink2);max-width:60ch}
+.readout{padding:56px var(--pad) 48px}
+.readout .eyebrow{margin-bottom:22px;display:block}
+.big{font-family:var(--disp);font-weight:800;font-variation-settings:"wdth" 106;
+     font-size:clamp(44px,10vw,96px);line-height:1;letter-spacing:-.05em;
+     color:var(--ink);font-variant-numeric:tabular-nums}
+.big .sep{color:var(--rosso);padding:0 .1em;font-size:.5em;font-weight:400;vertical-align:.2em;letter-spacing:0}
+.big .cur{font-size:.34em;vertical-align:.62em;color:var(--rosso);font-weight:600;padding-right:.1em;letter-spacing:0}
+.readout .sub{margin-top:26px;font-size:15px;color:var(--ink2);max-width:62ch;line-height:1.65}
+.readout .sub strong{color:var(--ink);font-weight:600}
 
-/* scale */
-.scale{margin:38px 0 6px}
+.scale{margin:12px 0 0;padding:34px var(--pad) 28px}
 .scale svg{width:100%;height:auto;display:block;overflow:visible}
-.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
-.lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
-.sw{width:16px;height:9px;flex:none;border-radius:1px}
+.legend{display:flex;flex-wrap:wrap;gap:24px;margin-top:24px}
+.lg{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted)}
+.sw{width:18px;height:8px;flex:none;border-radius:2px}
 
-/* metrics */
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule2);
-         border:1px solid var(--rule2);margin:36px 0 0;border-radius:var(--r);overflow:hidden}
-.m{background:var(--card);padding:16px 16px 15px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(20,22,26,.09);
+         border:1px solid var(--edge);margin:12px 0 0;border-radius:var(--r);overflow:hidden;box-shadow:var(--lift)}
+.m{background:var(--pane-hi);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);padding:24px}
 @media (max-width:560px){.metrics{grid-template-columns:repeat(2,1fr)}}
-.m .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
-.m .v{font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:600;margin-top:7px;letter-spacing:-0.02em}
-.m .d{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
+.m .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.m .v{font-family:var(--disp);font-weight:800;font-size:30px;margin-top:11px;letter-spacing:-.035em;color:var(--ink);font-variant-numeric:tabular-nums}
+.m .d{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.45}
 
-/* prose blocks */
-.block{margin-top:40px}
-.block h3{font-size:17px;font-weight:700;font-stretch:105%;margin-bottom:10px}
-.block p{margin:0 0 11px;font-size:14.5px;color:var(--ink2);max-width:68ch;line-height:1.6}
+.block{margin-top:12px;padding:30px var(--pad) 32px}
+.block h3{font-size:19px;margin-bottom:16px;letter-spacing:-.025em}
+.block p{margin:0 0 12px;font-size:14.5px;color:var(--ink2);max-width:68ch;line-height:1.68}
+.block p strong{color:var(--ink);font-weight:600}
 .block ul{margin:0;padding-left:18px;max-width:68ch}
-.block li{font-size:14.5px;color:var(--ink2);margin-bottom:7px;line-height:1.55}
-.callout{border-left:3px solid var(--cobalt);background:var(--cobalt-soft);padding:16px 18px;border-radius:0 var(--r) var(--r) 0}
-.callout.warn{border-left-color:var(--amber);background:#FBF3E4}
-.callout p{margin:0 0 9px;color:var(--ink2)}
+.block li{font-size:14.5px;color:var(--ink2);margin-bottom:8px;line-height:1.6}
+/* dentro una lastra il richiamo non ha bisogno di un'altra superficie: basta il filetto */
+.callout{border-left:3px solid var(--steel);background:rgba(78,90,107,.07);padding:18px 20px;border-radius:0 var(--rs) var(--rs) 0}
+.callout+.callout{margin-top:10px}
+.callout.warn{border-left-color:var(--rosso);background:rgba(200,16,46,.06)}
+.callout p{margin:0 0 11px}
 .callout p:last-child{margin:0}
-.callout strong{color:var(--ink)}
 
-details.meth{border-top:1px solid var(--rule);margin-top:44px;padding-top:0}
+details.meth{margin-top:12px;padding:0 var(--pad)}
 details.meth summary{
-  cursor:pointer;padding:20px 0;font-family:"Archivo",sans-serif;font-weight:700;font-size:16px;
+  cursor:pointer;padding:26px 0;font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:-.025em;color:var(--ink);
   list-style:none;display:flex;justify-content:space-between;align-items:center;
 }
 details.meth summary::-webkit-details-marker{display:none}
-details.meth summary::after{content:"+";font-family:"IBM Plex Mono",monospace;color:var(--cobalt);font-size:20px}
+details.meth summary::after{content:"+";font-family:var(--mono);color:var(--rosso);font-size:20px;font-weight:400}
 details.meth[open] summary::after{content:"–"}
-details.meth summary:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
-.meth-body{padding-bottom:26px}
-table.tbl{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:13.5px}
-table.tbl th,table.tbl td{text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--rule2);vertical-align:top}
-table.tbl th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500}
-table.tbl td.n{font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+details.meth summary:focus-visible{outline:2px solid var(--rosso);outline-offset:2px}
+.meth-body{padding-bottom:34px}
+.meth-body p,.meth-body li{color:var(--ink2)!important}
+.meth-body p strong,.meth-body li strong{color:var(--ink)}
+table.tbl{width:100%;border-collapse:collapse;margin:16px 0 6px;font-size:13.5px}
+table.tbl th,table.tbl td{text-align:left;padding:11px 12px 11px 0;border-bottom:1px solid var(--hair2);vertical-align:top;color:var(--ink2)}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:400}
+table.tbl td.n{font-family:var(--mono);white-space:nowrap;color:var(--ink)}
 
-footer{border-top:1px solid var(--rule);padding:30px 0 60px;font-size:12.5px;color:var(--muted)}
-footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
+footer{border:0;padding:0 0 40px;font-size:12.5px;color:var(--muted)}
+footer>.wrap{padding:30px var(--pad) 32px}
+footer p{margin:0 0 10px;max-width:70ch;line-height:1.65}
+footer a{color:var(--ink2);text-decoration:none;border-bottom:1px solid var(--hair)}
+footer a:hover{color:var(--rosso);border-bottom-color:var(--rosso)}
 
 @media (max-width:640px){
-  .steps{grid-template-columns:1fr}
-  .step{border-right:0;border-bottom:1px solid var(--rule)}
-  .step:last-child{border-bottom:0}
-  .bar-in{padding:11px 18px}
+  :root{--pad:22px;--r:18px}
+  .wrap{padding:0 16px}
+  .hd{padding:46px var(--pad) 40px;margin-top:16px}
+  .steps{grid-template-columns:1fr;padding:22px var(--pad) 24px}
+  .step{padding:0;border-right:0;border-bottom:1px solid var(--hair2);padding-bottom:18px;margin-bottom:18px}
+  .step:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}
+  .part{padding:48px 0 4px}
+  .bar{padding:0 16px 14px}
+  .bar-in{max-width:none;border-radius:20px;padding:14px 16px}
   button.go{width:100%;order:2}
   .prog{order:1;width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+/* senza backdrop-filter le lastre diventano semplicemente più piene */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  :root{--pane:rgba(232,235,238,.88);--pane-hi:rgba(236,239,242,.92)}
+  .bar-in{background:rgba(232,235,238,.94)}
+}
 </style>
 </head>
 <body>
@@ -183,6 +231,7 @@ footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
 <header>
   <div class="wrap hd">
     <span class="eyebrow">Strumento di stima · mercato del lavoro italiano · dati 2025</span>
+    <div class="filet"></div>
     <h1>Quanto vale <em>questo ruolo</em>, e dove ci stai dentro tu</h1>
     <p class="standfirst">Un questionario in tre parti che pesa prima la posizione, poi il contesto, poi la persona — la stessa sequenza usata dai sistemi di job evaluation e dalle strutture retributive aziendali.</p>
     <p class="note">Il risultato è una banda, non un numero. Istruzione ed esperienza spiegano circa un terzo della variazione retributiva, e l'azienda in cui lavori ne spiega da sola un altro 15–25%. Uno strumento onesto restituisce l'ampiezza reale dell'incertezza.</p>
@@ -242,9 +291,9 @@ footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
           <title id="viztitle">Scala retributiva con distribuzione nazionale, banda di mercato del ruolo e posizione stimata</title>
         </svg>
         <div class="legend">
-          <div class="lg"><span class="sw" style="background:#E9EBE6"></span>Distribuzione nazionale (10°–90° percentile)</div>
-          <div class="lg"><span class="sw" style="background:var(--cobalt-mid)"></span>Banda di mercato del ruolo</div>
-          <div class="lg"><span class="sw" style="background:var(--plum)"></span>Stima per la persona</div>
+          <div class="lg"><span class="sw" style="background:rgba(22,24,27,.09)"></span>Distribuzione nazionale (10°–90° percentile)</div>
+          <div class="lg"><span class="sw" style="background:rgba(78,90,107,.5)"></span>Banda di mercato del ruolo</div>
+          <div class="lg"><span class="sw" style="background:var(--rosso)"></span>Stima per la persona</div>
         </div>
       </div>
 
@@ -269,10 +318,10 @@ footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
       <details class="meth">
         <summary>Metodo, calibrazione e limiti</summary>
         <div class="meth-body">
-          <p style="font-size:14.5px;color:var(--ink2);max-width:68ch;line-height:1.6">Lo strumento replica, in forma semplificata, la catena che le aziende usano davvero: <strong>job evaluation a punti → grade → midpoint di mercato → ampiezza di banda → posizionamento individuale</strong>.</p>
+          <p style="font-size:14.5px;max-width:68ch">Lo strumento replica, in forma semplificata, la catena che le aziende usano davvero: <strong>job evaluation a punti → grade → midpoint di mercato → ampiezza di banda → posizionamento individuale</strong>.</p>
 
-          <h3 style="font-size:15px;margin:24px 0 4px">1. Pesatura della posizione</h3>
-          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Sette fattori per un totale di 100 punti, con pesi ispirati alle metodologie point-factor consolidate (Hay/Korn Ferry: know-how, problem solving, accountability; Mercer IPE; WTW GGS) e ai quattro criteri resi normativi dalla direttiva UE 2023/970 — competenze, impegno, responsabilità, condizioni di lavoro.</p>
+          <h3 style="font-size:15px;margin:28px 0 6px">1. Pesatura della posizione</h3>
+          <p style="font-size:14px;max-width:68ch">Sette fattori per un totale di 100 punti, con pesi ispirati alle metodologie point-factor consolidate (Hay/Korn Ferry: know-how, problem solving, accountability; Mercer IPE; WTW GGS) e ai quattro criteri resi normativi dalla direttiva UE 2023/970 — competenze, impegno, responsabilità, condizioni di lavoro.</p>
           <table class="tbl"><thead><tr><th>Fattore</th><th>Punti max</th><th>Corrisponde a</th></tr></thead><tbody>
             <tr><td>Competenze e know-how</td><td class="n">22</td><td>Competenze</td></tr>
             <tr><td>Problem solving</td><td class="n">18</td><td>Competenze / impegno</td></tr>
@@ -283,21 +332,21 @@ footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
             <tr><td>Condizioni di lavoro</td><td class="n">7</td><td>Condizioni di lavoro</td></tr>
           </tbody></table>
 
-          <h3 style="font-size:15px;margin:24px 0 4px">2. Da punti a midpoint</h3>
-          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Il punteggio mappa su 15 fasce con progressione del midpoint tra il 9% e il 20% — coerente con il 10–14% tipico delle strutture retributive, allargato in alto per riflettere la forte dispersione apicale italiana. La curva è ancorata ai dati JobPricing 2025 sul settore privato: RAL media 32.991 €, operai 27.909 €, impiegati 34.635 €, quadri 58.551 €, dirigenti 106.556 €.</p>
+          <h3 style="font-size:15px;margin:28px 0 6px">2. Da punti a midpoint</h3>
+          <p style="font-size:14px;max-width:68ch">Il punteggio mappa su 15 fasce con progressione del midpoint tra il 9% e il 20% — coerente con il 10–14% tipico delle strutture retributive, allargato in alto per riflettere la forte dispersione apicale italiana. La curva è ancorata ai dati JobPricing 2025 sul settore privato: RAL media 32.991 €, operai 27.909 €, impiegati 34.635 €, quadri 58.551 €, dirigenti 106.556 €.</p>
 
-          <h3 style="font-size:15px;margin:24px 0 4px">3. Moltiplicatori di contesto</h3>
-          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Settore, area e dimensione aziendale sono applicati moltiplicativamente al midpoint. Sono attenuati rispetto ai divari grezzi osservati (es. micro 28.610 € contro grandi imprese 39.021 €, Nord–Sud circa 4.400 € pari al 15%) perché una parte di quei divari dipende dalla diversa composizione dei ruoli, non dal prezzo dello stesso ruolo. Il prodotto dei tre moltiplicatori viene inoltre compresso con un esponente 0,75, per evitare che tre scelte estreme nella stessa direzione si sommino in modo irrealistico.</p>
-          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Sul fondo della scala è applicato un pavimento di circa 18.800 € full time, che è l'ordine di grandezza dei minimi tabellari più bassi in essere. È una salvaguardia grossolana: <strong>non sostituisce la verifica del minimo del CCNL effettivamente applicato</strong>, che è l'unico dato vincolante.</p>
+          <h3 style="font-size:15px;margin:28px 0 6px">3. Moltiplicatori di contesto</h3>
+          <p style="font-size:14px;max-width:68ch">Settore, area e dimensione aziendale sono applicati moltiplicativamente al midpoint. Sono attenuati rispetto ai divari grezzi osservati (es. micro 28.610 € contro grandi imprese 39.021 €, Nord–Sud circa 4.400 € pari al 15%) perché una parte di quei divari dipende dalla diversa composizione dei ruoli, non dal prezzo dello stesso ruolo. Il prodotto dei tre moltiplicatori viene inoltre compresso con un esponente 0,75, per evitare che tre scelte estreme nella stessa direzione si sommino in modo irrealistico.</p>
+          <p style="font-size:14px;max-width:68ch">Sul fondo della scala è applicato un pavimento di circa 18.800 € full time, che è l'ordine di grandezza dei minimi tabellari più bassi in essere. È una salvaguardia grossolana: <strong>non sostituisce la verifica del minimo del CCNL effettivamente applicato</strong>, che è l'unico dato vincolante.</p>
 
-          <h3 style="font-size:15px;margin:24px 0 4px">4. Ampiezza della banda</h3>
-          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Semiampiezza dal 15% al 26% attorno al midpoint, crescente con la fascia: corrisponde a un range spread del 35% per i ruoli esecutivi fino a circa il 70% per i ruoli apicali, in linea con il 40–60% tipico dei ruoli professional e con l'80%+ delle bande executive.</p>
+          <h3 style="font-size:15px;margin:28px 0 6px">4. Ampiezza della banda</h3>
+          <p style="font-size:14px;max-width:68ch">Semiampiezza dal 15% al 26% attorno al midpoint, crescente con la fascia: corrisponde a un range spread del 35% per i ruoli esecutivi fino a circa il 70% per i ruoli apicali, in linea con il 40–60% tipico dei ruoli professional e con l'80%+ delle bande executive.</p>
 
-          <h3 style="font-size:15px;margin:24px 0 4px">5. Posizionamento individuale</h3>
-          <p style="font-size:14px;color:var(--ink2);max-width:68ch">Otto fattori individuali sommano uno scostamento che viene compresso con una funzione tangente iperbolica, in modo che il compa-ratio resti nell'intervallo 0,78–1,22. Il profilo dell'esperienza è concavo, come nell'equazione di Mincer, dove i rendimenti crescono e poi si appiattiscono. L'anzianità aziendale entra con segno negativo perché la compressione retributiva penalizza sistematicamente chi resta a lungo senza cambio di ruolo.</p>
+          <h3 style="font-size:15px;margin:28px 0 6px">5. Posizionamento individuale</h3>
+          <p style="font-size:14px;max-width:68ch">Otto fattori individuali sommano uno scostamento che viene compresso con una funzione tangente iperbolica, in modo che il compa-ratio resti nell'intervallo 0,78–1,22. Il profilo dell'esperienza è concavo, come nell'equazione di Mincer, dove i rendimenti crescono e poi si appiattiscono. L'anzianità aziendale entra con segno negativo perché la compressione retributiva penalizza sistematicamente chi resta a lungo senza cambio di ruolo.</p>
 
-          <h3 style="font-size:15px;margin:24px 0 4px">Limiti dichiarati</h3>
-          <ul style="font-size:14px;color:var(--ink2);max-width:68ch;padding-left:18px">
+          <h3 style="font-size:15px;margin:28px 0 6px">Limiti dichiarati</h3>
+          <ul style="max-width:68ch;padding-left:18px">
             <li>Copre il <strong>lavoro dipendente del settore privato in Italia</strong>. Partite IVA, soci lavoratori e pubblico impiego seguono logiche diverse.</li>
             <li>Stima la <strong>RAL fissa</strong>. Il variabile è indicato a parte: in Italia lo percepisce solo il 37,4% dei dipendenti.</li>
             <li>Non sostituisce una salary survey. Le survey commerciali (Mercer, WTW, JobPricing) lavorano su dati aziendali verificati e mappati su grade, non su autodichiarazioni.</li>
@@ -313,6 +362,7 @@ footer p{margin:0 0 8px;max-width:70ch;line-height:1.55}
   <div class="wrap">
     <p>Calibrazione basata su: Osservatorio JobPricing, JP Salary Outlook 2026 (dati 2025); decomposizioni AKM della varianza salariale (Card–Heining–Kline e letteratura successiva, incluso il manifatturiero italiano); Sackett et al. 2022 sulla validità dei predittori di performance; metodologie di job evaluation Hay/Korn Ferry, Mercer IPE, WTW GGS; direttiva (UE) 2023/970 e D.Lgs. 96/2026.</p>
     <p>Stima statistica a scopo informativo. Non è una consulenza retributiva, legale o contrattuale, e non tiene conto della tua situazione specifica. Nessun dato lascia il browser: il calcolo avviene interamente in locale e nulla viene salvato.</p>
+    <p>Fotografia di sfondo: <a href="https://unsplash.com/photos/0648a3ef77b2" rel="noopener">Unsplash</a>.</p>
   </div>
 </footer>
 
@@ -668,15 +718,15 @@ function drawScale(bMin,mid,bMax,pLo,point,pHi){
   const AXIS=y(150), MONO="IBM Plex Mono, monospace";
 
   /* distribuzione nazionale */
-  add("rect",{x:xOf(21000),y:y(96),width:xOf(40000)-xOf(21000),height:y(34),fill:"#E9EBE6"});
-  add("line",{x1:xOf(29500),x2:xOf(29500),y1:y(96),y2:y(130),stroke:"#C3C7BF","stroke-width":1.5*S});
-  if(S<1.8) add("text",{x:xOf(29500),y:y(88),"text-anchor":"middle","font-family":MONO,"font-size":fs(10.5),fill:"#6E747B"},"mediana Italia");
+  add("rect",{x:xOf(21000),y:y(96),width:xOf(40000)-xOf(21000),height:y(34),fill:"rgba(22,24,27,0.07)"});
+  add("line",{x1:xOf(29500),x2:xOf(29500),y1:y(96),y2:y(130),stroke:"rgba(22,24,27,0.2)","stroke-width":1.5*S});
+  if(S<1.8) add("text",{x:xOf(29500),y:y(88),"text-anchor":"middle","font-family":MONO,"font-size":fs(10.5),fill:"#767C84"},"mediana Italia");
 
   /* banda di mercato del ruolo */
   const xa=xOf(bMin), xb=xOf(bMax);
-  add("rect",{x:xa,y:y(52),width:Math.max(2,xb-xa),height:y(44),fill:"#B9C6F4"});
-  add("line",{x1:xOf(mid),x2:xOf(mid),y1:y(52),y2:y(96),stroke:"#1F4FD8","stroke-width":2*S});
-  const lbl={"font-family":MONO,"font-size":fs(11),fill:"#1F4FD8","dominant-baseline":"middle"};
+  add("rect",{x:xa,y:y(52),width:Math.max(2,xb-xa),height:y(44),fill:"rgba(78,90,107,0.42)"});
+  add("line",{x1:xOf(mid),x2:xOf(mid),y1:y(52),y2:y(96),stroke:"#4E5A6B","stroke-width":2*S});
+  const lbl={"font-family":MONO,"font-size":fs(11),fill:"#4E5A6B","dominant-baseline":"middle"};
   const pad=7*S, gap=78*S;
   /* le etichette stanno sempre fuori dalla banda; se non c'è spazio ai lati
      salgono sulla riga sopra, ancorate al bordo — non finiscono mai una sull'altra */
@@ -686,20 +736,20 @@ function drawScale(bMin,mid,bMax,pLo,point,pHi){
   else          add("text",Object.assign({},lbl,{x:X1,y:y(40),"text-anchor":"end"}),"€ "+eur(bMax));
 
   /* stima per la persona */
-  add("rect",{x:xOf(pLo),y:y(16),width:Math.max(3,xOf(pHi)-xOf(pLo)),height:y(8),fill:"#8A2846",opacity:"0.28"});
-  add("line",{x1:xOf(point),x2:xOf(point),y1:y(8),y2:y(100),stroke:"#8A2846","stroke-width":2.5*S});
-  add("circle",{cx:xOf(point),cy:y(8),r:4*S,fill:"#8A2846"});
+  add("rect",{x:xOf(pLo),y:y(16),width:Math.max(3,xOf(pHi)-xOf(pLo)),height:y(8),fill:"#C8102E",opacity:"0.28"});
+  add("line",{x1:xOf(point),x2:xOf(point),y1:y(8),y2:y(100),stroke:"#C8102E","stroke-width":2.5*S});
+  add("circle",{cx:xOf(point),cy:y(8),r:4*S,fill:"#C8102E"});
   const px=xOf(point), edge=100*S;
   add("text",{x:px,y:y(-6),"text-anchor":px>X1-edge?"end":(px<X0+edge?"start":"middle"),
-    "font-family":MONO,"font-size":fs(12),"font-weight":"600",fill:"#8A2846"},"€ "+eur(point));
+    "font-family":MONO,"font-size":fs(12),"font-weight":"600",fill:"#C8102E"},"€ "+eur(point));
 
   /* asse */
-  add("line",{x1:X0,x2:X1,y1:AXIS,y2:AXIS,stroke:"#D6D9D3","stroke-width":1*S});
+  add("line",{x1:X0,x2:X1,y1:AXIS,y2:AXIS,stroke:"rgba(22,24,27,0.18)","stroke-width":1*S});
   const ticks = S>1.8 ? [20,30,50,80,140,200] : [20,25,30,40,50,60,80,100,140,200];
   ticks.forEach(k=>{
     const x=xOf(k*1000);
-    add("line",{x1:x,x2:x,y1:AXIS,y2:AXIS+y(6),stroke:"#D6D9D3","stroke-width":1*S});
-    add("text",{x:x,y:AXIS+y(21),"text-anchor":"middle","font-family":MONO,"font-size":fs(10.5),fill:"#6E747B"},k+"k");
+    add("line",{x1:x,x2:x,y1:AXIS,y2:AXIS+y(6),stroke:"rgba(22,24,27,0.18)","stroke-width":1*S});
+    add("text",{x:x,y:AXIS+y(21),"text-anchor":"middle","font-family":MONO,"font-size":fs(10.5),fill:"#767C84"},k+"k");
   });
   add("text",{x:X0,y:AXIS+y(42),"font-family":MONO,"font-size":fs(10),fill:"#9AA0A6","letter-spacing":1.4*S},
       "RAL LORDA ANNUA — SCALA LOGARITMICA");
