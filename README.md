@@ -1,5 +1,7 @@
 # Human Capital Estimator
 
+[![Tests](https://github.com/PierpaoloGonnella/Human-Capital/actions/workflows/tests.yml/badge.svg)](https://github.com/PierpaoloGonnella/Human-Capital/actions/workflows/tests.yml)
+
 Stima la banda di RAL attesa per un ruolo e per la persona che lo ricopre nel mercato del lavoro italiano.
 
 [Apri lo strumento](https://pierpaologonnella.github.io/Human-Capital/)
